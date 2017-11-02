@@ -6,6 +6,7 @@ import * as PIXI from 'pixi.js';
 import { zoom, zoomIdentity } from 'd3-zoom';
 import { select, event } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
+import { easeLinear } from 'd3-ease';
 
 import HeatmapTiledPixiTrack from './HeatmapTiledPixiTrack';
 import Id2DTiledPixiTrack from './Id2DTiledPixiTrack';
@@ -176,6 +177,20 @@ export class TrackRenderer extends React.Component {
     this.currentProps.registerDraggingChangedListener(this.draggingChanged.bind(this));
 
     this.draggingChanged(true);
+
+    this.endZoomTransform = zoomIdentity
+      .translate(230.9198654642439, 316.62143282473727)
+      .scale(0.000009669564298209758)
+
+    console.log('zoomIdentity', zoomIdentity);
+    console.log('endTransform', this.endZoomTransform);
+
+    //console.log('zoomBehavior.on', this.zoomBehavior.on('zoom'));
+    this.divTrackAreaSelection
+      .transition()
+      .duration(20000)
+      .ease(easeLinear)
+      .call(this.zoomBehavior.transform, this.endZoomTransform);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -268,14 +283,16 @@ export class TrackRenderer extends React.Component {
   /* --------------------------- Custom Methods ----------------------------- */
 
   addZoom() {
+    console.log('adding zoom');
     if (!this.divTrackAreaSelection) { return; }
 
     // add back the previous transform
-    this.divTrackAreaSelection.call(this.zoomBehavior);
+    //this.divTrackAreaSelection.call(this.zoomBehavior);
     this.zoomBehavior.transform(this.divTrackAreaSelection, this.zoomTransform);
   }
 
   removeZoom() {
+    console.log('removing zoom');
     if (this.divTrackAreaSelection) {
       this.zoomEnded();
       this.divTrackAreaSelection.on('.zoom', null);

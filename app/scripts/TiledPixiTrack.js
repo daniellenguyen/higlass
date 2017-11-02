@@ -223,7 +223,8 @@ export class TiledPixiTrack extends PixiTrack {
     this.xScale(newXScale);
     this.yScale(newYScale);
 
-    this.refreshTilesDebounced();
+    //this.refreshTilesDebounced();
+    this.refreshTiles();
 
     this.pMobile.position.x = tx;
     this.pMobile.position.y = this.position[1];
