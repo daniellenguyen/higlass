@@ -2,6 +2,8 @@ import * as PIXI from 'pixi.js';
 
 import {PixiTrack} from './PixiTrack';
 
+import {scaleLinear} from 'd3-scale';
+
 class HorizontalHelloWorld2 extends PixiTrack {
   constructor(scene, options, animate) {
     super(scene, options);
@@ -30,30 +32,42 @@ class HorizontalHelloWorld2 extends PixiTrack {
 
   /**
    * helper function to draw a single line in the track
+   *
+   * @param color line color
+   * @param lineNumber which line are we drawing?
    */
-  drawLine() {
-
+  drawAllLines(color, lineNumber) {
+    const distance = 50000000;
+    for (let i = 0; i < this.arrayList.length; i++) {
+      const array = this.arrayList[i];
+      const x = this._xScale(i * distance);
+      const y = this.valueToPixels(array[lineNumber]);
+      this.pMain.lineStyle(1, color, 1);
+      this.pMain.lineTo(x, y);
+    }
   }
 
   draw() {
-    /**
-     * draw first line red
-     * then second line and so on
-     */
-
-    for (let i = 0; i < this.arrayList.length; i++) {
-      const array = this.arrayList[i];
-      this.pMain.lineStyle()
-      this.pMain.beginFill(0xFF0000, 1);
-      this.drawVerticalBars(i, array[0], 0);
-      this.pMain.beginFill(0xf4eb42, 1);
-      this.drawVerticalBars(i, array[1], array[0] * 50);
-      this.pMain.beginFill(0x6ef441, 1);
-      this.drawVerticalBars(i, array[2], (array[0] + array[1]) * 50);
-      this.pMain.beginFill(0x4179f4, 1);
-      this.drawVerticalBars(i, array[3], (array[0] + array[1] + array[2]) * 50);
-    }
+    // converts y values on a scale [0, 1] to pixels
+    this.valueToPixels = scaleLinear()
+      .domain([0, 1])
+      .range([100, 150]);
+    // Math.random isn't in the dataset, it's just a placeholder for a
+    // better fix
+    this.pMain.moveTo(50000000, this.valueToPixels(Math.random()));
+    this.drawAllLines(0xFF0000, 0);
+    this.pMain.currentPath.shape.closed = false;
+    this.pMain.moveTo(50000000, this.valueToPixels(Math.random()));
+    this.drawAllLines(0xf4eb42, 1);
+    this.pMain.currentPath.shape.closed = false;
+    this.pMain.moveTo(50000000, this.valueToPixels(Math.random()));
+    this.drawAllLines(0x6ef441, 2);
+    this.pMain.currentPath.shape.closed = false;
+    this.pMain.moveTo(50000000, this.valueToPixels(Math.random()));
+    this.drawAllLines(0x4179f4, 3);
+    this.pMain.currentPath.shape.closed = false;
   }
+
 
   zoomed(newXScale, newYScale, k, tx, ty) {
     super.zoomed(newXScale, newYScale);

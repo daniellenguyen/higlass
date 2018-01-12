@@ -87,7 +87,7 @@ class HorizontalHelloWorld extends PixiTrack {
     // this.text.x = newXScale(0);
     // this.text1.x = newXScale(2000000000);
 
-    let interval = 100000000;
+    //let interval = 100000000;
     // for (let i = 0; i < this.pixiTexts.length; i++) {
     //   //this.pixiTexts[i].anchor.x = 0;
     //   this.pixiTexts[i].x = this._xScale(interval * i);
