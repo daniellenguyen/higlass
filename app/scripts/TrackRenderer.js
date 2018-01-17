@@ -48,6 +48,7 @@ import MapboxTilesTrack from './MapboxTilesTrack';
 
 import HorizontalHelloWorld from './HorizontalHelloWorld';
 import HorizontalHelloWorld2 from './HorizontalHelloWorld2';
+import HorizontalHelloWorld3 from './HorizontalHelloWorld3';
 
 // Utils
 import { dictItems } from './utils';
@@ -831,6 +832,18 @@ export class TrackRenderer extends React.Component {
         );
       case 'hello-world2':
         return new HorizontalHelloWorld2(
+          this.pStage,
+          dataConfig,
+          handleTilesetInfoReceived,
+          track.options,
+          () => this.currentProps.onNewTilesLoaded(track.uid),
+          this.svgElement,
+          () => this.currentProps.onValueScaleChanged(track.uid),
+          newOptions =>
+            this.currentProps.onTrackOptionsChanged(track.uid, newOptions),
+        );
+      case 'hello-world3':
+        return new HorizontalHelloWorld3(
           this.pStage,
           dataConfig,
           handleTilesetInfoReceived,
