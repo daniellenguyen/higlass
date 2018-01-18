@@ -107,6 +107,8 @@ export function workerSetPix(
   } catch (err) {
     console.warn('Odd datapoint');
     console.warn('valueScale.domain():', valueScale.domain());
+    console.warn('valueScale.range():', valueScale.range());
+    console.warn('value:', valueScale(e + pseudocount));
     console.warn('pseudocount:', pseudocount);
     console.warn('rgbIdx:', rgbIdx, 'd:', e, 'ct:', valueScale(e));
     console.error('ERROR:', err);

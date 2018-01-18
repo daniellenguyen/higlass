@@ -39,7 +39,7 @@ export class BarTrack extends HorizontalLine1DPixiTrack {
 
   renderTile(tile) {
     //super.drawTile(tile);
-
+  // console.log("tile", tile)
     if (!tile.graphics) { return; }
 
     const graphics = tile.graphics;

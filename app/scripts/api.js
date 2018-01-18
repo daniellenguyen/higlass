@@ -8,11 +8,23 @@ import {
   MOUSE_TOOL_SELECT,
 } from './configs';
 
-import pubSub from './services/pub-sub';
+import pubSub, { create } from './services/pub-sub';
 
-export const api = function api(context) {
+let stack = {};
+let pubSubs = [];
+
+const apiPubSub = create(stack);
+
+export const destroy = () => {
+  pubSubs.forEach(subscription => pubSub.unsubscribe(subscription));
+  pubSubs = [];
+  stack = {};
+};
+
+const api = function api(context) {
   const self = context;
 
+  // Public API
   return {
     setViewConfig(newViewConfig) {
       /**
@@ -31,21 +43,20 @@ export const api = function api(context) {
        *    is loaded
        */
       const viewsByUid = self.processViewConfig(newViewConfig);
-      const p = new Promise((resolve, reject) => {
-
+      const p = new Promise((resolve) => {
         this.requestsInFlight = 0;
 
-        const requestsSent = pubSub.subscribe('requestSent', (url) => {
+        pubSubs.push(pubSub.subscribe('requestSent', () => {
           this.requestsInFlight += 1;
-        });
+        }));
 
-        const requestsReceived = pubSub.subscribe('requestReceived', (url) => {
+        pubSubs.push(pubSub.subscribe('requestReceived', () => {
           this.requestsInFlight -= 1;
 
-          if (this.requestsInFlight == 0) {
+          if (this.requestsInFlight === 0) {
             resolve();
           }
-        });
+        }));
 
         self.setState({
           views: viewsByUid,
@@ -72,7 +83,28 @@ export const api = function api(context) {
        */
       self.handleZoomToData(viewUid);
     },
-    
+
+    getDataURI() {
+      /**
+       * Export the current canvas as a PNG string so that
+       * it can be saved
+       *
+       * Return
+       * ------
+       *  pngString: string
+       *    A data URI
+       */
+      return self.createDataURI();
+    },
+
+    /**
+     * Activate a specific mouse tool.
+     *
+     * @description
+     * Mouse tools enable different behaviors which would otherwise clash. For
+     *
+     * @param {string}  tool  Mouse tool name to be selected.
+     */
     activateTool(tool) {
       switch (tool) {
         case 'select':
@@ -112,6 +144,9 @@ export const api = function api(context) {
 
         case 'viewConfig':
           return Promise.resolve(self.getViewsAsString());
+
+        case 'svgString':
+          return Promise.resolve(self.createSVGString());
 
         default:
           return Promise.reject(`Propert "${prop}" unknown`);
@@ -174,6 +209,16 @@ export const api = function api(context) {
           self.offLocationChange(viewId, listenerId);
           break;
 
+        case 'mouseMoveZoom':
+          apiPubSub.unsubscribe(
+            'mouseMoveZoom', (
+              typeof listenerId === 'object'
+                ? listenerId.callback
+                : listenerId
+            )
+          );
+          break;
+
         case 'rangeSelection':
           self.offRangeSelection(listenerId);
           break;
@@ -192,7 +237,9 @@ export const api = function api(context) {
       switch (event) {
         case 'location':
           return self.onLocationChange(viewId, callback, callbackId);
-          break;
+
+        case 'mouseMoveZoom':
+          return apiPubSub.subscribe('mouseMoveZoom', callback);
 
         case 'rangeSelection':
           return self.onRangeSelection(callback);
@@ -201,10 +248,11 @@ export const api = function api(context) {
           return self.onViewChange(callback);
 
         default:
-          return;
+          return undefined;
       }
     },
   };
 };
 
 export default api;
+export const publish = apiPubSub.publish;
