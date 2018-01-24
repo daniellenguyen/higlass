@@ -64,8 +64,8 @@ export default class HorizontalMultivecTrack extends HeatmapTiledPixiTrack {
     ctx.fillStyle = 'transparent';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    console.log('pixData:', pixData);
-    console.log('canvas.width:', canvas.width, 'canvas.height', canvas.height);
+    // console.log('pixData:', pixData);
+    // console.log('canvas.width:', canvas.width, 'canvas.height', canvas.height);
 
     const pix = new ImageData(pixData, canvas.width, canvas.height);
 
@@ -89,7 +89,7 @@ export default class HorizontalMultivecTrack extends HeatmapTiledPixiTrack {
     sprite.x = this._refXScale(tileX);
     sprite.y = 0;
 
-    console.log('sprite.x:', sprite.x);
+    // console.log('sprite.x:', sprite.x);
     /*
     console.log('sprite.y:', sprite.y);
     console.log('sprite.height:', sprite.height);
@@ -114,7 +114,7 @@ export default class HorizontalMultivecTrack extends HeatmapTiledPixiTrack {
     if (!this.tilesetInfo) { return; }
 
     this.zoomLevel = this.calculateZoomLevel();
-    console.log('zoomLevel:', this.zoomLevel);
+    // console.log('zoomLevel:', this.zoomLevel);
 
     let sortedResolutions = this.tilesetInfo.resolutions.map(x => +x).sort((a,b) => b-a)
 
@@ -128,13 +128,13 @@ export default class HorizontalMultivecTrack extends HeatmapTiledPixiTrack {
     //console.log('this.xTiles:', this.xTiles);
 
     const tiles = this.xTiles.map(x => [this.zoomLevel, x]);
-    console.log('tiles:', tiles);
+    // console.log('tiles:', tiles);
 
     this.setVisibleTiles(tiles);
   }
 
   calculateZoomLevel() {
-    console.log('tilesetInfo:', this.tilesetInfo);
+    // console.log('tilesetInfo:', this.tilesetInfo);
 
     let minX = this.tilesetInfo.min_pos[0];
 

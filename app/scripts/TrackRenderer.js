@@ -22,6 +22,7 @@ import HorizontalMultivecTrack from './HorizontalMultivecTrack';
 import BarTrack from './BarTrack';
 import DivergentBarTrack from './DivergentBarTrack';
 import MultivecBarTrack from './MultivecBarTrack';
+import MultipleBarChartTrack from './MultipleBarChartTrack';
 
 import CNVIntervalTrack from './CNVIntervalTrack';
 import LeftTrackModifier from './LeftTrackModifier';
@@ -874,7 +875,6 @@ export class TrackRenderer extends React.Component {
         );
 
       case 'horizontal-multivec':
-        console.log('horizontal multivec');
         return new HorizontalMultivecTrack(
           this.pStage,
           dataConfig,
@@ -895,6 +895,30 @@ export class TrackRenderer extends React.Component {
           track.options,
           () => this.currentProps.onNewTilesLoaded(track.uid),
           () => this.currentProps.onValueScaleChanged(track.uid),
+        );
+      case 'multivec-bar':
+        return new MultivecBarTrack(
+          this.pStage,
+          dataConfig,
+          handleTilesetInfoReceived,
+          track.options,
+          () => this.currentProps.onNewTilesLoaded(track.uid),
+          this.svgElement,
+          () => this.currentProps.onValueScaleChanged(track.uid),
+          newOptions =>
+            this.currentProps.onTrackOptionsChanged(track.uid, newOptions),
+        );
+      case 'multiple-bar-chart':
+        return new MultipleBarChartTrack(
+          this.pStage,
+          dataConfig,
+          handleTilesetInfoReceived,
+          track.options,
+          () => this.currentProps.onNewTilesLoaded(track.uid),
+          this.svgElement,
+          () => this.currentProps.onValueScaleChanged(track.uid),
+          newOptions =>
+            this.currentProps.onTrackOptionsChanged(track.uid, newOptions),
         );
       case 'hello-world':
         return new HorizontalHelloWorld(
@@ -922,18 +946,6 @@ export class TrackRenderer extends React.Component {
         );
       case 'hello-world3':
         return new HorizontalHelloWorld3(
-          this.pStage,
-          dataConfig,
-          handleTilesetInfoReceived,
-          track.options,
-          () => this.currentProps.onNewTilesLoaded(track.uid),
-          this.svgElement,
-          () => this.currentProps.onValueScaleChanged(track.uid),
-          newOptions =>
-            this.currentProps.onTrackOptionsChanged(track.uid, newOptions),
-        );
-      case 'multivec-bar':
-        return new MultivecBarTrack(
           this.pStage,
           dataConfig,
           handleTilesetInfoReceived,
