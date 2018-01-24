@@ -3,7 +3,7 @@ import { scaleLinear, scaleOrdinal, schemeCategory10 } from 'd3-scale';
 import { colorToHex } from './utils';
 import { range } from 'd3-array';
 
-class HorizontalHelloWorld3 extends PixiTrack {
+class BasicMultipleBarChart extends PixiTrack {
   constructor(scene, options, animate) {
     super(scene, options);
     this.makeData();
@@ -30,35 +30,38 @@ class HorizontalHelloWorld3 extends PixiTrack {
   }
 
   /**
-   * helper function to draw a single line in the track
+   * helper function to draw a single bar chart in the track
    *
    * @param lineNumber which line is being drawn?
    */
-  drawLine(lineNumber) {
-    const distance = 50000000; // 50 million nucleotides between each data point
+  drawBarChart(lineNumber) {
+    const tileWidth = 50000000;
+    const distance = 50000000;
     const arrayLength = this.arrayList[0].length;
     const currentTrackHeight = this.dimensions[1];
-    // interval height for each line. if interval is negative make it 0.
-    const lineInterval = ((currentTrackHeight) / (arrayLength) < 0) ? 0 : (currentTrackHeight) / (arrayLength);
+    // how far is each bar chart from the top of the track? if this number is negative make it 0.
+    const lineInterval = currentTrackHeight / arrayLength; // todo here?
     const colorScale = scaleOrdinal(schemeCategory10).domain(range(arrayLength));
     const valueToPixels = scaleLinear()
       .domain([0, 1])
       .range([lineInterval / arrayLength, lineInterval]);
 
-    this.pMain.lineStyle(1, colorToHex(colorScale(lineNumber)), 1);
+    this.pMain.beginFill(colorToHex(colorScale(lineNumber)), 1);
+    //this.pMain.lineStyle(1, colorToHex(colorScale(lineNumber)), 1); // for hollow bars
     for (let i = 0; i < this.arrayList.length; i++) {
       const array = this.arrayList[i];
       const x = this._xScale(i * distance);
-      // separates each consecutive line while still showing correct value
-      const y = (this.position[1] + (lineInterval * lineNumber)) + valueToPixels(array[lineNumber]);
-      // move draw position back to the start at beginning of each line
-      (i == 0) ? this.pMain.moveTo(x, y) : this.pMain.lineTo(x, y);
+      // separates each consecutive bar while still showing correct value
+      const y = (this.position[1] + (lineInterval * lineNumber) + lineInterval);
+      const width = this._xScale(distance + tileWidth) - this._xScale(distance);
+      const height = valueToPixels(array[lineNumber]) - lineInterval;
+      this.pMain.drawRect(x, y, width, height);
     }
   }
 
   draw() {
     for (let i = 0; i < this.arrayList[0].length; i++) {
-      this.drawLine(i);
+      this.drawBarChart(i);
     }
   }
 
@@ -70,5 +73,6 @@ class HorizontalHelloWorld3 extends PixiTrack {
 
 }
 
-export default HorizontalHelloWorld3;
+export default BasicMultipleBarChart;
+
 

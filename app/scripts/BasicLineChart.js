@@ -2,7 +2,7 @@ import {PixiTrack} from './PixiTrack';
 
 import {scaleLinear} from 'd3-scale';
 
-class HorizontalHelloWorld2 extends PixiTrack {
+class BasicLineChart extends PixiTrack {
   constructor(scene, options, animate) {
     super(scene, options);
     this.makeData();
@@ -65,5 +65,5 @@ class HorizontalHelloWorld2 extends PixiTrack {
 
 }
 
-export default HorizontalHelloWorld2;
+export default BasicLineChart;
 
