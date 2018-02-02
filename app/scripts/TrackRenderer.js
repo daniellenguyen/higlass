@@ -57,7 +57,9 @@ import BasicLineChart from './BasicLineChart';
 import BasicMultipleLineChart from './BasicMultipleLineChart';
 import BasicMultipleBarChart from './BasicMultipleBarChart';
 import MultivecBarTrack from './MultivecBarTrack';
+import MultivecSortedBarTrack from './MultivecSortedBarTrack';
 import MultipleBarChartTrack from './MultipleBarChartTrack';
+import MultipleLineChartTrack from './MultipleLineChartTrack';
 
 // Utils
 import { dictItems } from './utils';
@@ -909,8 +911,32 @@ export class TrackRenderer extends React.Component {
           newOptions =>
             this.currentProps.onTrackOptionsChanged(track.uid, newOptions),
         );
+      case 'multivec-sorted-bar':
+        return new MultivecSortedBarTrack(
+          this.pStage,
+          dataConfig,
+          handleTilesetInfoReceived,
+          track.options,
+          () => this.currentProps.onNewTilesLoaded(track.uid),
+          this.svgElement,
+          () => this.currentProps.onValueScaleChanged(track.uid),
+          newOptions =>
+            this.currentProps.onTrackOptionsChanged(track.uid, newOptions),
+        );
       case 'multiple-bar-chart':
         return new MultipleBarChartTrack(
+          this.pStage,
+          dataConfig,
+          handleTilesetInfoReceived,
+          track.options,
+          () => this.currentProps.onNewTilesLoaded(track.uid),
+          this.svgElement,
+          () => this.currentProps.onValueScaleChanged(track.uid),
+          newOptions =>
+            this.currentProps.onTrackOptionsChanged(track.uid, newOptions),
+        );
+      case 'multiple-line-chart':
+        return new MultipleLineChartTrack(
           this.pStage,
           dataConfig,
           handleTilesetInfoReceived,

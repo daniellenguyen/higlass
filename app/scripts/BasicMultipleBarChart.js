@@ -40,7 +40,7 @@ class BasicMultipleBarChart extends PixiTrack {
     const arrayLength = this.arrayList[0].length;
     const currentTrackHeight = this.dimensions[1];
     // how far is each bar chart from the top of the track? if this number is negative make it 0.
-    const lineInterval = currentTrackHeight / arrayLength; // todo here?
+    const lineInterval = currentTrackHeight / arrayLength;
     const colorScale = scaleOrdinal(schemeCategory10).domain(range(arrayLength));
     const valueToPixels = scaleLinear()
       .domain([0, 1])
@@ -74,5 +74,4 @@ class BasicMultipleBarChart extends PixiTrack {
 }
 
 export default BasicMultipleBarChart;
-
 

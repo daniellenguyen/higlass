@@ -35,91 +35,80 @@ And some other text
   var testViewConfig =
     {
       "editable": true,
+      "zoomFixed": false,
+      "trackSourceServers": [
+        "http://higlass.io/api/v1"
+      ],
+      "exportViewUrl": "/api/v1/viewconfs",
       "views": [
         {
-          "uid": "a",
+          "uid": "aa",
           "initialXDomain": [
-            0,
-            10000000,
+            -1687777777.7777781,
+            4787777777.777778
           ],
+          "autocompleteSource": "/api/v1/suggest/?d=OHJakQICQD6gTD7skx4EWA&",
+          "genomePositionSearchBox": {
+            "autocompleteServer": "http://higlass.io/api/v1",
+            "autocompleteId": "OHJakQICQD6gTD7skx4EWA",
+            "chromInfoServer": "http://higlass.io/api/v1",
+            "chromInfoId": "hg19",
+            "visible": true
+          },
+          "chromInfoPath": "//s3.amazonaws.com/pkerp/data/hg19/chromSizes.tsv",
           "tracks": {
             "top": [
               {
-                "name": "wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdSig.hitile",
-                "created": "2017-11-02T15:37:26.351612Z",
-                "server": "http://higlass.io/api/v1",
-                "tilesetUid": "Hj6L9JuNRnC1004qQqV_LQ",
-                "uid": "fWqsPqlPQzaSFCWEyekq5A",
-                "type": "horizontal-bar",
-                "options": {
-                  "labelColor": "black",
-                  "labelPosition": "topLeft",
-                  "axisPositionHorizontal": "right",
-                  "barFillColor": "darkgreen",
-                  "valueScaling": "linear",
-                  "trackBorderWidth": 0,
-                  "trackBorderColor": "black",
-                  "labelTextOpacity": 0.4,
-                  "barOpacity": 1,
-                  "name": "wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdSig.hitile"
-                },
-                "width": 568,
-                "height": 55,
+                "type": "top-axis",
+                "local": true,
+                "orientation": "1d-horizontal",
+                "name": "Top Axis",
+                "thumbnail": {},
+                "defaultOptions": {},
+                "server": "",
+                "tilesetUid": "IRLRL6yyQDWVa4jJuMWPLA",
+                "uid": "aFQIaSwzStCwl8tFkldmHQ",
+                "options": {},
+                "width": 20,
+                "height": 20,
                 "position": "top"
               },
               {
-                "name": "drosophila.multivec.hdf5",
-                "server": "http://test1.resgen.io/api/v1",
-                "tilesetUid": "Fvy0kNjjQviWt7JnX5UZiQ",
-                "uid": "YyTlGjsGT12zNaVR_9UnRg",
-                "type": "multiple-bar-chart",
-                "height": 138,
+                "server": "http://localhost:8000/api/v1",
+                "tilesetUid": "RAh2nvU9THezcVuxBU3ioQ",
+                "type": "basic-multiple-bar-chart",
+                "height": 200,
                 "position": "top",
+                "uid": "c_QyRCkUQOKUFLTDj1_Z8A",
                 "options": {
                   "labelPosition": "topLeft",
                   "labelColor": "black",
                   "labelTextOpacity": 0.4,
                   "valueScaling": "linear",
                   "trackBorderWidth": 0,
-                  "trackBorderColor": "black",
-                  "name": "drosophila.multivec.hdf5"
+                  "trackBorderColor": "black"
                 },
-                "width": 651
-              },
-              {
-                "name": "drosophila.multivec.hdf5",
-                "server": "http://test1.resgen.io/api/v1",
-                "tilesetUid": "Fvy0kNjjQviWt7JnX5UZiQ",
-                "uid": "xassd",
-                "type": "horizontal-multivec",
-                "height": 138,
-                "position": "top",
-                "options": {
-                  "labelPosition": "topLeft",
-                  "labelColor": "black",
-                  "labelTextOpacity": 0.4,
-                  "valueScaling": "linear",
-                  "trackBorderWidth": 0,
-                  "trackBorderColor": "black",
-                  "name": "drosophila.multivec.hdf5"
-                },
-                "width": 651
+                "width": 470
               }
             ],
             "left": [],
             "center": [],
-            "bottom": [],
-            "right": []
+            "right": [],
+            "bottom": []
           },
           "layout": {
-            "w": 12,
-            "h": 6,
+            "w": 10,
+            "h": 12,
             "x": 0,
             "y": 0,
-            "i": "a",
+            "i": "aa",
             "moved": false,
             "static": false
-          }
+          },
+          "initialYDomain": [
+            -764666666.6666665,
+            3864666666.666667
+          ]
         }
       ],
       "zoomLocks": {
@@ -160,3 +149,4 @@ And some other text
 
 </script>
 </html>
+

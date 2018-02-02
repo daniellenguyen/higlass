@@ -1,10 +1,24 @@
-import {BarTrack} from './BarTrack';
-import {scaleLinear, scaleOrdinal, schemeCategory10} from 'd3-scale';
-import {colorToHex} from './utils';
+import { BarTrack } from './BarTrack';
+import { scaleLinear, scaleOrdinal, schemeCategory10 } from 'd3-scale';
+import { colorToHex } from './utils';
+import { range } from 'd3-array';
 
-export class MultivecBarTrack extends BarTrack {
-  constructor(scene, dataConfig, handleTilesetInfoReceived, option, animate, onValueScaleChanged) {
-    super(scene, dataConfig, handleTilesetInfoReceived, option, animate, onValueScaleChanged);
+class MultipleLineChartTrack extends BarTrack {
+  constructor(scene,
+              dataConfig,
+              handleTilesetInfoReceived,
+              option,
+              animate,
+              onValueScaleChanged,) {
+    super(
+      scene,
+      dataConfig,
+      handleTilesetInfoReceived,
+      option,
+      animate,
+      onValueScaleChanged,
+    );
+
   }
 
   initTile(tile) {
@@ -18,7 +32,6 @@ export class MultivecBarTrack extends BarTrack {
     // we're setting the start of the tile to the current zoom level
     const {tileX, tileWidth} = this.getTilePosAndDimensions(tile.tileData.zoomLevel,
       tile.tileData.tilePos, this.tilesetInfo.tile_size);
-
     const shapeX = tile.tileData.shape[0]; // number of different nucleotides in each bar
     const shapeY = tile.tileData.shape[1]; // number of bars
     const flattenedArray = tile.tileData.dense;
@@ -28,7 +41,7 @@ export class MultivecBarTrack extends BarTrack {
     // because of how flattenedArray comes back from the server.
     const matrix = [];
     for (let i = 0; i < shapeX; i++) {//6
-      for (let j = 0; j < shapeY; j++) {//256;
+      for (let j = 0; j < shapeY; j++) {//256
         let singleBar;
         (matrix[j] === undefined) ? singleBar = [] : singleBar = matrix[j];
         singleBar.push(flattenedArray[(shapeY * i) + j]);
@@ -43,44 +56,46 @@ export class MultivecBarTrack extends BarTrack {
       matrix[i] = temp.map((a) => a / barValuesSum);
     }
 
-    this.drawVerticalBars(graphics, matrix, tileX, tileWidth);
+    this.drawLines(graphics, matrix, tileX, tileWidth);
   }
 
+
   /**
-   * Draws graph.
-   *
+   * helper function to draw a single line in the track
    * @param graphics PIXI.Graphics instance
    * @param matrix 2d array of numbers representing nucleotides
    * @param tileX starting position of tile
    * @param tileWidth pre-scaled width of tile
    */
-  drawVerticalBars(graphics, matrix, tileX, tileWidth) {
+  drawLines(graphics, matrix, tileX, tileWidth) {
     graphics.clear();
+    const arrayLength = matrix[0].length;
     const currentTrackHeight = this.dimensions[1];
-    const colorScale = scaleOrdinal(schemeCategory10);
+    // interval height for each line. if interval is negative make it 0.
+    const lineInterval = ((currentTrackHeight) / (arrayLength) < 0) ? 0 : (currentTrackHeight) / (arrayLength);
+    const colorScale = scaleOrdinal(schemeCategory10).domain(range(arrayLength));
     const valueToPixels = scaleLinear()
       .domain([0, 1])
-      .range([0, currentTrackHeight]);
-    let prevStackedBarHeight = 0;
-    for (let j = 0; j < matrix.length; j++) { // jth vertical bar in the graph
-      const x = this._xScale(tileX + (j * tileWidth / this.tilesetInfo.tile_size));
-      const width = this._xScale(tileX + (tileWidth / this.tilesetInfo.tile_size)) - this._xScale(tileX);
+      .range([0, lineInterval]);
 
-      for (let i = 0; i < matrix[j].length; i++) {
-        const y = this.position[0] + (prevStackedBarHeight * currentTrackHeight);
-        const height = valueToPixels(matrix[j][i]);
-        graphics.beginFill(colorToHex(colorScale(i)), 1);
-        graphics.drawRect(x, y, width, height);
+    for(let i = 0; i < arrayLength; i++) {
+      graphics.lineStyle(1, colorToHex(colorScale(i)), 1);
 
-        prevStackedBarHeight = prevStackedBarHeight + matrix[j][i];
+      for(let j = 0; j < matrix.length; j++) {
+        array = matrix[i];
+        const x = this._xScale(tileX + ((j * tileWidth) / this.tilesetInfo.tile_size));
+        const y = (this.position[0] + (lineInterval * i)) + valueToPixels(matrix[j][i]);
+        // move draw position back to the start at beginning of each line
+        (j == 0) ? graphics.moveTo(x, y) : graphics.lineTo(x, y);
       }
-      prevStackedBarHeight = 0;
     }
   }
 
   draw() {
     super.draw();
   }
+
 }
 
-export default MultivecBarTrack;
+export default MultipleLineChartTrack;
+
