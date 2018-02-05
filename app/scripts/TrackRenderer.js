@@ -21,8 +21,6 @@ import HorizontalPoint1DPixiTrack from './HorizontalPoint1DPixiTrack';
 import HorizontalMultivecTrack from './HorizontalMultivecTrack';
 import BarTrack from './BarTrack';
 import DivergentBarTrack from './DivergentBarTrack';
-import MultivecBarTrack from './MultivecBarTrack';
-import MultipleBarChartTrack from './MultipleBarChartTrack';
 
 import CNVIntervalTrack from './CNVIntervalTrack';
 import LeftTrackModifier from './LeftTrackModifier';
@@ -54,9 +52,14 @@ import OSMTilesTrack from './OSMTilesTrack';
 import MapboxTilesTrack from './MapboxTilesTrack';
 import ImageTilesTrack from './ImageTilesTrack';
 
-import HorizontalHelloWorld from './HorizontalHelloWorld';
-import HorizontalHelloWorld2 from './HorizontalHelloWorld2';
-import HorizontalHelloWorld3 from './HorizontalHelloWorld3';
+import BasicStackedBarChart from './BasicStackedBarChart';
+import BasicLineChart from './BasicLineChart';
+import BasicMultipleLineChart from './BasicMultipleLineChart';
+import BasicMultipleBarChart from './BasicMultipleBarChart';
+import MultivecBarTrack from './MultivecBarTrack';
+import MultivecSortedBarTrack from './MultivecSortedBarTrack';
+import MultipleBarChartTrack from './MultipleBarChartTrack';
+import MultipleLineChartTrack from './MultipleLineChartTrack';
 
 // Utils
 import { dictItems } from './utils';
@@ -908,6 +911,18 @@ export class TrackRenderer extends React.Component {
           newOptions =>
             this.currentProps.onTrackOptionsChanged(track.uid, newOptions),
         );
+      case 'multivec-sorted-bar':
+        return new MultivecSortedBarTrack(
+          this.pStage,
+          dataConfig,
+          handleTilesetInfoReceived,
+          track.options,
+          () => this.currentProps.onNewTilesLoaded(track.uid),
+          this.svgElement,
+          () => this.currentProps.onValueScaleChanged(track.uid),
+          newOptions =>
+            this.currentProps.onTrackOptionsChanged(track.uid, newOptions),
+        );
       case 'multiple-bar-chart':
         return new MultipleBarChartTrack(
           this.pStage,
@@ -920,8 +935,8 @@ export class TrackRenderer extends React.Component {
           newOptions =>
             this.currentProps.onTrackOptionsChanged(track.uid, newOptions),
         );
-      case 'hello-world':
-        return new HorizontalHelloWorld(
+      case 'multiple-line-chart':
+        return new MultipleLineChartTrack(
           this.pStage,
           dataConfig,
           handleTilesetInfoReceived,
@@ -932,8 +947,8 @@ export class TrackRenderer extends React.Component {
           newOptions =>
             this.currentProps.onTrackOptionsChanged(track.uid, newOptions),
         );
-      case 'hello-world2':
-        return new HorizontalHelloWorld2(
+      case 'basic-stacked-bar-chart':
+        return new BasicStackedBarChart(
           this.pStage,
           dataConfig,
           handleTilesetInfoReceived,
@@ -944,8 +959,32 @@ export class TrackRenderer extends React.Component {
           newOptions =>
             this.currentProps.onTrackOptionsChanged(track.uid, newOptions),
         );
-      case 'hello-world3':
-        return new HorizontalHelloWorld3(
+      case 'basic-line-chart':
+        return new BasicLineChart(
+          this.pStage,
+          dataConfig,
+          handleTilesetInfoReceived,
+          track.options,
+          () => this.currentProps.onNewTilesLoaded(track.uid),
+          this.svgElement,
+          () => this.currentProps.onValueScaleChanged(track.uid),
+          newOptions =>
+            this.currentProps.onTrackOptionsChanged(track.uid, newOptions),
+        );
+      case 'basic-multiple-line-chart':
+        return new BasicMultipleLineChart(
+          this.pStage,
+          dataConfig,
+          handleTilesetInfoReceived,
+          track.options,
+          () => this.currentProps.onNewTilesLoaded(track.uid),
+          this.svgElement,
+          () => this.currentProps.onValueScaleChanged(track.uid),
+          newOptions =>
+            this.currentProps.onTrackOptionsChanged(track.uid, newOptions),
+        );
+      case 'basic-multiple-bar-chart':
+        return new BasicMultipleBarChart(
           this.pStage,
           dataConfig,
           handleTilesetInfoReceived,

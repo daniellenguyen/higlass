@@ -201,6 +201,13 @@ export const OPTIONS_INFO = {
       no: { name: 'No', value: false },
     },
   },
+  scaledHeight: {
+    name: 'Scale Height According to Values',
+    inlineOptions: {
+      yes: { name: 'Yes', value: true},
+      no: { name: 'No', value: false },
+    },
+  },
   axisPositionHorizontal: {
     name: 'Axis Position',
     inlineOptions: {
